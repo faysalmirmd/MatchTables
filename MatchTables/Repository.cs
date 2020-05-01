@@ -15,10 +15,22 @@ namespace MatchTables
 
         public async Task<bool> IsSchemaSame(Parameters parameters)
         {
-            //TODO:will be implemented later
-            //var sqlQuery = "SELECT COLUMN_NAME, IS_NULLABLE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE FROM [INFORMATION_SCHEMA].[COLUMNS] SC1 WHERE SC1.TABLE_NAME = 'NewTable' and TABLE_CATALOG = 'Test2'";
-            //var res = await _sqlCommandExecutor.Execute(sqlQuery);
-            return true;
+            //Columns type, name matching
+            var sqlQueryColumns =
+                $"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE FROM [INFORMATION_SCHEMA].[COLUMNS] WHERE TABLE_NAME = '{parameters.table1}' " +
+                $"EXCEPT SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE FROM[INFORMATION_SCHEMA].[COLUMNS] WHERE TABLE_NAME = '{parameters.table2}'";
+            var colsResult = await _sqlCommandExecutor.Execute(sqlQueryColumns);
+
+            //Primary key matching
+            var  sqlQueryPk =
+                "SELECT KU.table_name, column_name " +
+                "FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC " +
+                "INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU    " +
+                "ON TC.CONSTRAINT_TYPE = 'PRIMARY KEY' AND TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME " +
+                $"AND KU.table_name IN ('{parameters.table1}', '{parameters.table2}') ORDER BY KU.TABLE_NAME, KU.ORDINAL_POSITION;";
+             var res = await _sqlCommandExecutor.Execute(sqlQueryPk);
+
+            return !colsResult.Any() && res.Count == 2 && res.First()["column_name"].Equals(res.Last()["column_name"]);
         }
 
         public async Task<List<Dictionary<string, string>>> GetAddedItems(Parameters parameters)

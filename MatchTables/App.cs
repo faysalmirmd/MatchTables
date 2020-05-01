@@ -22,6 +22,12 @@ namespace MatchTables
         {
             try
             {
+                if (!await _controller.IsSchemaSame(parameters))
+                {
+                    _view.ShowExceptionMessage("Schemas of two input tables do not match.");
+                    return;
+                }
+
                 await _controller.Run(parameters);
             }
             catch (SqlException ex)
