@@ -15,9 +15,9 @@ namespace MatchTables
 
             while (!argumentParser.IsValid(args))
             {
-                //TODO: fix it
                 Console.WriteLine("Please enter arguments in this formats -Table1 SourceTable1 -Table2 SourceTable2 -Primarykey PrimaryKeyName");
-                args = Console.ReadLine().Split();
+                var input = Console.ReadLine();
+                args = input.Split();
             }
 
             var parameters = argumentParser.Parse(args);
