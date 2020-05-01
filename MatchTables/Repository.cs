@@ -47,16 +47,19 @@ namespace MatchTables
 
         public async Task<Dictionary<string, List<Data>>> GetChangedItems(Parameters parameters)
         {
+            var response = new Dictionary<string, List<Data>>();
+
             var sqlQuery = $"select * from {parameters.table1} where {parameters.primarykey} not in (Select t1.{parameters.primarykey} from {parameters.table1} t1 left join {parameters.table2} t2 on t2.{parameters.primarykey} = t1.{parameters.primarykey} where t2.{parameters.primarykey} is null)"+
             $" except select * from {parameters.table2}";
 
             var originalDataFromTable1 = await _sqlCommandExecutor.Execute(sqlQuery);
+            if (!originalDataFromTable1.Any()) return response;
+
             var keys = originalDataFromTable1.Select(r => r[parameters.primarykey]).ToArray();
             
             var sqlQuery1 = $"Select * from {parameters.table2} where {parameters.primarykey} in ({string.Join(", ", keys)})";
             var distortedDataFromTable2 = await _sqlCommandExecutor.Execute(sqlQuery1);
 
-            var response = new Dictionary<string, List<Data>>();
             foreach (var row in originalDataFromTable1)
             {
                 var changedValues = new List<Data>();

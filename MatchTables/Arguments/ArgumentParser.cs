@@ -18,12 +18,14 @@ namespace MatchTables
         public Parameters Parse(string[] args)
         {
             var parameters = new Parameters();
-            SetProperty(parameters, GetParameterName(args[0]), args[1]);
-            SetProperty(parameters, GetParameterName(args[2]), args[3]);
-            SetProperty(parameters, GetParameterName(args[4]), args[5]);
+            SetProperty(parameters, GetParameterName(args[0]), GetParameterValue(args[1]));
+            SetProperty(parameters, GetParameterName(args[2]), GetParameterValue(args[3]));
+            SetProperty(parameters, GetParameterName(args[4]), GetParameterValue(args[5]));
 
             return parameters;
         }
+
+
 
 
         void SetProperty(Parameters obj, string propName, string value)
@@ -38,6 +40,11 @@ namespace MatchTables
         string GetParameterName(string name)
         {
             return name.TrimStart('-').ToLower();
+        }
+
+        private string GetParameterValue(string val)
+        {
+            return val.TrimStart('[').TrimEnd(']');
         }
     }
 }
