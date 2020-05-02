@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MatchTables
+﻿namespace MatchTables
 {
     public interface IArgumentParser
     {

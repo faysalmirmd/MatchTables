@@ -17,7 +17,7 @@ namespace MatchTables
             PrintListOfItems(removesItems, "Removed Items: ");
         }
 
-        public void ShowChangedItems(Dictionary<string, List<Data>> changedItems)
+        public void ShowChangedItems(Dictionary<string, List<ChangedViewData>> changedItems)
         {
             var items = new List<string>();
             changedItems.Keys.ToList().ForEach(key => 

@@ -6,7 +6,7 @@ namespace MatchTables
     {
         void ShowAddedItems(IEnumerable<string> addedItems);
         void ShowRemovedItems(IEnumerable<string> addedItems);
-        void ShowChangedItems(Dictionary<string, List<Data>> changedItems);
+        void ShowChangedItems(Dictionary<string, List<ChangedViewData>> changedItems);
         void ShowExceptionMessage(string exMessage);
     }
 }

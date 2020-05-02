@@ -18,21 +18,20 @@ namespace MatchTables
             _view = view;
         }
 
-        public async Task Run(Parameters parameters)
+        public async Task RunAsync(Parameters parameters)
         {
             try
             {
-                if (!await _controller.IsSchemaSame(parameters))
+                if (!await _controller.IsSchemaValidAsync(parameters))
                 {
                     _view.ShowExceptionMessage("Schemas of two input tables do not match.");
                     return;
                 }
 
-                await _controller.Run(parameters);
+                await _controller.RunAsync(parameters);
             }
             catch (SqlException ex)
             {
-                _view.ShowExceptionMessage("SQL Exception occurred. Make sure proper connection string provided in app settings.");
                 _view.ShowExceptionMessage(ex.Message);
             }
             catch (Exception ex)

@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.IO;
 
 namespace MatchTables
 {
@@ -21,13 +20,12 @@ namespace MatchTables
             }
 
             var parameters = argumentParser.Parse(args);
-            serviceProvider.GetService<App>().Run(parameters).Wait();
+            serviceProvider.GetService<App>().RunAsync(parameters).Wait();
             Console.Read();
         }
 
         private static IServiceProvider ConfigureServices(IServiceCollection serviceCollection)
         {
-            // Build configuration
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
                 .AddJsonFile("appsettings.json", false)

@@ -5,6 +5,6 @@ namespace MatchTables
 {
     public interface ISqlCommandExecutor
     {
-        Task<List<Dictionary<string, string>>> Execute(string sqlQuery);
+        Task<List<Dictionary<string, string>>> ExecuteAsync(string sqlQuery);
     }
 }

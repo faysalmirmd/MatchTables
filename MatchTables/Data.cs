@@ -1,6 +1,6 @@
 ﻿namespace MatchTables
 {
-    public class Data
+    public class ChangedViewData
     {
         public string ColumnName { get; set; }
         public string OriginalValue { get; set; }

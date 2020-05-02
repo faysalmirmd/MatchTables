@@ -17,7 +17,7 @@ namespace MatchTables
             _configuration = configuration;
         }
 
-        public async Task<List<Dictionary<string, string>>> Execute(string sqlQuery)
+        public async Task<List<Dictionary<string, string>>> ExecuteAsync(string sqlQuery)
         {
             var data = new List<Dictionary<string, string>>();
             var connectionString = _configuration.GetConnectionString(ConnectionStringConfigName);
@@ -29,7 +29,7 @@ namespace MatchTables
                 var reader = await command.ExecuteReaderAsync();
                 try
                 {
-                    var columns = GetColumnNames(reader);
+                    var columns = GetColumnNamesAsync(reader);
 
                     while (reader.Read())
                     {
@@ -47,7 +47,7 @@ namespace MatchTables
             return data;
         }
 
-        private static List<string> GetColumnNames(IDataRecord reader)
+        private static List<string> GetColumnNamesAsync(IDataRecord reader)
         {
             var columns = new List<string>();
 

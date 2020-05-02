@@ -25,9 +25,6 @@ namespace MatchTables
             return parameters;
         }
 
-
-
-
         void SetProperty(Parameters obj, string propName, string value)
         {
             var prop = obj.GetType().GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
