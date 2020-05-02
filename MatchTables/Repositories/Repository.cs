@@ -30,7 +30,7 @@ namespace MatchTables
                 $"AND KU.table_name IN ('{parameters.table1}', '{parameters.table2}') ORDER BY KU.TABLE_NAME, KU.ORDINAL_POSITION;";
              var res = await _sqlCommandExecutor.ExecuteAsync(sqlQueryPk);
 
-            return !colsResult.Any() && res.Count == 2 && res.First()["column_name"].Equals(res.Last()["column_name"]);
+            return !colsResult.Any() && res.Count == 2 && res.First()["column_name"].Equals(res.Last()["column_name"]) && res.First()["column_name"].Equals(parameters.primarykey);
         }
 
         public async Task<List<Dictionary<string, string>>> GetAddedItemsAsync(Parameters parameters)

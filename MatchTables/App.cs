@@ -24,7 +24,7 @@ namespace MatchTables
             {
                 if (!await _controller.IsSchemaValidAsync(parameters))
                 {
-                    _view.ShowExceptionMessage("Schemas of two input tables do not match.");
+                    _view.ShowExceptionMessage("Invalid input. Schemas of two input tables do not match.");
                     return;
                 }
 
