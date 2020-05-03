@@ -6,6 +6,6 @@ namespace MatchTables
     {
         Task RunAsync(Parameters parameters);
 
-        Task<bool> IsSchemaValidAsync(Parameters parameters);
+        Task<ValidationResponse> IsSchemaValidAsync(Parameters parameters);
     }
 }

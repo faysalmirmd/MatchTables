@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace MatchTables
 {
     public class ConsoleView : IView
     {
-        public void ShowAddedItems(IEnumerable<string> addedItems)
+        public void ShowAddedItems(IEnumerable<ItemViewData> addedItems)
         {
-            PrintListOfItems(addedItems, "Added Items: ");
+            PrintListOfItems(addedItems.Select(i => i.PrimaryKeyValue + $" ({i.OtherColumnValue})"), "Added Items: ");
         }
 
-        public void ShowRemovedItems(IEnumerable<string> removesItems)
+        public void ShowRemovedItems(IEnumerable<ItemViewData> removesItems)
         {
-            PrintListOfItems(removesItems, "Removed Items: ");
+            PrintListOfItems(removesItems.Select(i => i.PrimaryKeyValue + $" ({i.OtherColumnValue})"), "Removed Items: ");
         }
 
         public void ShowChangedItems(Dictionary<string, List<ChangedViewData>> changedItems)

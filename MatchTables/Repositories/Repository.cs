@@ -13,7 +13,7 @@ namespace MatchTables
             _sqlCommandExecutor = sqlCommandExecutor;
         }
 
-        public async Task<bool> IsValidSchemaAsync(Parameters parameters)
+        public async Task<ValidationResponse> IsValidSchemaAsync(Parameters parameters)
         {
             //Columns type, name matching
             var sqlQueryColumns =
@@ -28,9 +28,26 @@ namespace MatchTables
                 "INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU    " +
                 "ON TC.CONSTRAINT_TYPE = 'PRIMARY KEY' AND TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME " +
                 $"AND KU.table_name IN ('{parameters.table1}', '{parameters.table2}') ORDER BY KU.TABLE_NAME, KU.ORDINAL_POSITION;";
-             var res = await _sqlCommandExecutor.ExecuteAsync(sqlQueryPk);
+             
+            var res = await _sqlCommandExecutor.ExecuteAsync(sqlQueryPk);
+            var validationResponse = new ValidationResponse(){IsValid = true};
+            if (colsResult.Any())
+            {
+                validationResponse.IsValid = false;
+                validationResponse.ReasonPhrase = "Two tables do not share same schema";
+                return validationResponse;
+            }
 
-            return !colsResult.Any() && res.Count == 2 && res.First()["column_name"].Equals(res.Last()["column_name"]) && res.First()["column_name"].Equals(parameters.primarykey);
+            var table1Pks = res.Where(r => r["table_name"].Equals(parameters.table1)).Select(i => i["column_name"]);
+            var table2Pks = res.Where(r => r["table_name"].Equals(parameters.table2)).Select(i => i["column_name"]);
+
+            if (!table1Pks.Contains(parameters.primarykey) || !table2Pks.Contains(parameters.primarykey))
+            {
+                validationResponse.IsValid = false;
+                validationResponse.ReasonPhrase = "Primary Key is invalid";
+            }
+
+            return validationResponse;
         }
 
         public async Task<List<Dictionary<string, string>>> GetAddedItemsAsync(Parameters parameters)

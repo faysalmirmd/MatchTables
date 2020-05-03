@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MatchTables
@@ -21,7 +23,7 @@ namespace MatchTables
             await ExecuteChangedItemsAsync(parameters);
         }
 
-        public async Task<bool> IsSchemaValidAsync(Parameters parameters)
+        public async Task<ValidationResponse> IsSchemaValidAsync(Parameters parameters)
         {
             return await _repository.IsValidSchemaAsync(parameters);
         }
@@ -29,13 +31,15 @@ namespace MatchTables
         private async Task ExecuteAddedItemsAsync(Parameters parameters)
         {
             var addedItems = await _repository.GetAddedItemsAsync(parameters);
-            _view.ShowAddedItems(addedItems.Select(i => i[parameters.primarykey]));
+            var otherColName = addedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey));
+            _view.ShowAddedItems(addedItems.Select(i =>  new ItemViewData {PrimaryKeyValue = i[parameters.primarykey], OtherColumnValue = otherColName !=  null ? i[otherColName] : null }));
         }
 
         private async Task ExecuteRemovedItemsAsync(Parameters parameters)
         {
             var removedItems = await _repository.GetRemovedItemsAsync(parameters);
-            _view.ShowRemovedItems(removedItems.Select(i => i[parameters.primarykey]));
+            var otherColName = removedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey));
+            _view.ShowRemovedItems(removedItems.Select(i => new ItemViewData { PrimaryKeyValue = i[parameters.primarykey], OtherColumnValue = otherColName != null ? i[otherColName] : null }));
         }
 
         private async Task ExecuteChangedItemsAsync(Parameters parameters)

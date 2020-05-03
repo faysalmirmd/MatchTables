@@ -22,9 +22,10 @@ namespace MatchTables
         {
             try
             {
-                if (!await _controller.IsSchemaValidAsync(parameters))
+                var validationResponse = await _controller.IsSchemaValidAsync(parameters);
+                if (!validationResponse.IsValid)
                 {
-                    _view.ShowExceptionMessage("Invalid input. Schemas of two input tables do not match.");
+                    _view.ShowExceptionMessage(validationResponse.ReasonPhrase);
                     return;
                 }
 
