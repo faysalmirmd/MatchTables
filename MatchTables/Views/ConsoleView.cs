@@ -8,12 +8,12 @@ namespace MatchTables
     {
         public void ShowAddedItems(IEnumerable<ItemViewData> addedItems)
         {
-            PrintListOfItems(addedItems.Select(i => i.PrimaryKeyValue + $" ({i.OtherColumnValue})"), "Added Items: ");
+            PrintListOfItems(addedItems.Select(i => i.PrimaryKeyValue.Trim() + $" ({i.OtherColumnValue.Trim()})"), "Added Items: ");
         }
 
         public void ShowRemovedItems(IEnumerable<ItemViewData> removesItems)
         {
-            PrintListOfItems(removesItems.Select(i => i.PrimaryKeyValue + $" ({i.OtherColumnValue})"), "Removed Items: ");
+            PrintListOfItems(removesItems.Select(i => i.PrimaryKeyValue.Trim() + $" ({i.OtherColumnValue.Trim()})"), "Removed Items: ");
         }
 
         public void ShowChangedItems(Dictionary<string, List<ChangedViewData>> changedItems)

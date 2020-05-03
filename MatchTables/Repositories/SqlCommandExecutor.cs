@@ -33,7 +33,7 @@ namespace MatchTables
 
                     while (reader.Read())
                     {
-                        var dic = new Dictionary<string, string>();
+                        var dic = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
                         columns.ForEach(c => dic.Add(c, reader[c].ToString()));
                         data.Add(dic);
                     }

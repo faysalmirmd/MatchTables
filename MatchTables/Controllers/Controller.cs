@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +30,7 @@ namespace MatchTables
         private async Task ExecuteAddedItemsAsync(Parameters parameters)
         {
             var addedItems = await _repository.GetAddedItemsAsync(parameters);
-            var otherColName = addedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey));
+            var otherColName = addedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey, StringComparison.InvariantCultureIgnoreCase));
             _view.ShowAddedItems(addedItems.Select(i =>  new ItemViewData {PrimaryKeyValue = i[parameters.primarykey], OtherColumnValue = otherColName !=  null ? i[otherColName] : null }));
         }
 

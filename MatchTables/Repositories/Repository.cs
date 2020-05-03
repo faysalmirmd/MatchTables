@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,10 +39,10 @@ namespace MatchTables
                 return validationResponse;
             }
 
-            var table1Pks = res.Where(r => r["table_name"].Equals(parameters.table1)).Select(i => i["column_name"]);
-            var table2Pks = res.Where(r => r["table_name"].Equals(parameters.table2)).Select(i => i["column_name"]);
+            var table1Pks = res.Where(r => r["table_name"].Equals(parameters.table1, StringComparison.InvariantCultureIgnoreCase)).Select(i => i["column_name"]);
+            var table2Pks = res.Where(r => r["table_name"].Equals(parameters.table2, StringComparison.InvariantCultureIgnoreCase)).Select(i => i["column_name"]);
 
-            if (!table1Pks.Contains(parameters.primarykey) || !table2Pks.Contains(parameters.primarykey))
+            if (!table1Pks.Contains(parameters.primarykey, StringComparer.CurrentCultureIgnoreCase) || !table2Pks.Contains(parameters.primarykey, StringComparer.CurrentCultureIgnoreCase))
             {
                 validationResponse.IsValid = false;
                 validationResponse.ReasonPhrase = "Primary Key is invalid";
@@ -52,13 +53,13 @@ namespace MatchTables
 
         public async Task<List<Dictionary<string, string>>> GetAddedItemsAsync(Parameters parameters)
         {
-            var sqlQuery = $"Select t2.* from {parameters.table2} t2 left join {parameters.table1} t1 on t2.{parameters.primarykey} = t1.{parameters.primarykey} where t1.{parameters.primarykey} is null";
+            var sqlQuery = $"Select t2.* from [{parameters.table2}] t2 left join [{parameters.table1}] t1 on t2.[{parameters.primarykey}] = t1.[{parameters.primarykey}] where t1.[{parameters.primarykey}] is null";
             return await _sqlCommandExecutor.ExecuteAsync(sqlQuery);
         }
 
         public async Task<List<Dictionary<string, string>>> GetRemovedItemsAsync(Parameters parameters)
         {
-            var sqlQuery = $"Select t1.* from {parameters.table1} t1 left join {parameters.table2} t2 on t2.{parameters.primarykey} = t1.{parameters.primarykey} where t2.{parameters.primarykey} is null";
+            var sqlQuery = $"Select t1.* from [{parameters.table1}] t1 left join [{parameters.table2}] t2 on t2.[{parameters.primarykey}] = t1.[{parameters.primarykey}] where t2.[{parameters.primarykey}] is null";
             return await _sqlCommandExecutor.ExecuteAsync(sqlQuery);
         }
 
@@ -66,15 +67,15 @@ namespace MatchTables
         {
             var response = new Dictionary<string, List<ChangedViewData>>();
 
-            var sqlQuery = $"select * from {parameters.table1} where {parameters.primarykey} not in (Select t1.{parameters.primarykey} from {parameters.table1} t1 left join {parameters.table2} t2 on t2.{parameters.primarykey} = t1.{parameters.primarykey} where t2.{parameters.primarykey} is null)"+
-            $" except select * from {parameters.table2}";
+            var sqlQuery = $"select * from [{parameters.table1}] where [{parameters.primarykey}] not in (Select t1.[{parameters.primarykey}] from [{parameters.table1}] t1 left join [{parameters.table2}] t2 on t2.[{parameters.primarykey}] = t1.[{parameters.primarykey}] where t2.[{parameters.primarykey}] is null)"+
+            $" except select * from [{parameters.table2}]";
 
             var originalDataFromTable1 = await _sqlCommandExecutor.ExecuteAsync(sqlQuery);
             if (!originalDataFromTable1.Any()) return response;
 
-            var keys = originalDataFromTable1.Select(r => r[parameters.primarykey]).ToArray();
+            var keys = originalDataFromTable1.Select(r => "'"+r[parameters.primarykey]+ "'").ToArray();
             
-            var sqlQuery1 = $"Select * from {parameters.table2} where {parameters.primarykey} in ({string.Join(", ", keys)})";
+            var sqlQuery1 = $"Select * from [{parameters.table2}] where [{parameters.primarykey}] in ({string.Join(", ", keys)})";
             var distortedDataFromTable2 = await _sqlCommandExecutor.ExecuteAsync(sqlQuery1);
 
             foreach (var row in originalDataFromTable1)
