@@ -9,11 +9,9 @@ namespace MatchTables
     {
         private readonly IController _controller;
         private readonly IView _view;
-        //private readonly ILogger<App> _logger;
 
         public App(IController controller, IView view)
         {
-            //_logger = loggerFactory.CreateLogger<App>();
             _controller = controller;
             _view = view;
         }
