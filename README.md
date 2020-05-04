@@ -17,6 +17,7 @@ git clone https://github.com/faysalmirmd/MatchTables.git
 ```
 Step 2: From the Script folder Run the the script **MatchTables_CreateDBTbl_Script.sql** for creating Database and some tables
 This will create 
+```
 Database 
   [MatchTablesDB] 
 Tables 
@@ -26,11 +27,10 @@ Tables
   [StudentNewTable], Primary Key : [StudentId]
 ```
 Step 3: From the Script folder Run the the script **MatchTables_DataInsert.sql** for inserting sample data into the tables
-```
 
 # Project Setup
 Step 1: Download and install .NET Core 3.1 SDK (https://dotnet.microsoft.com/download/dotnet-core/3.1)
-```
+
 Step 2: Clone the following repository from Github.
 ```
 git clone https://github.com/faysalmirmd/MatchTables.git
@@ -39,20 +39,19 @@ cd MatchTables
 Step 3: Change Connection String in **appsettings.json** file to match yours
 ```
 "ConnectionStrings": {
-    "DataConnection": "Data Source=localhost;Initial Catalog=MatchTablesDB;Persist Security Info=True;User ID={your_db_user_id};Password={your_db_password}"
+    "DataConnection": "Data Source=localhost;Initial Catalog=MatchTablesDB;Persist Security Info=True;Trusted_Connection=true;"
   }
 ```
 Step 4: Change application arguments from **Properties > Debug > Application arguments**
 ```
--Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber
+-Table1 Table1Name -Table2 Table2Name -Primarykey PrimaryKeyName
 ```
-
 Step 5:
 Open, build and run the Solution MatchTables.sln in Visual Studio 2019
-```
 
 # Run From Cmd
-cd *..\MatchTables\bin\Debug\netcoreapp3.1* path and run following command
+Go to following directory and run the following command
 ```
+cd *..\MatchTables\bin\Debug\netcoreapp3.1* path and run following command
 .\MatchTables.exe -Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber
 ```
