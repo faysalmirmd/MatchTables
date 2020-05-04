@@ -15,7 +15,8 @@ Step 1: Clone the following repository from Github.
 ```
 git clone https://github.com/faysalmirmd/MatchTables.git
 ```
-Step 2: From the Script folder Run the the script **MatchTables_CreateDBTbl_Script.sql** for creating Database and some tables
+Step 2: From the Script folder Run the the script **MatchTables_CreateDBTbl_Script.sql** for creating Database and some tables.
+
 This will create 
 ```
 Database 
@@ -52,6 +53,6 @@ Open, build and run the Solution MatchTables.sln in Visual Studio 2019
 # Run From Cmd
 Go to following directory and run the following command
 ```
-cd *..\MatchTables\bin\Debug\netcoreapp3.1* path and run following command
+cd ..\MatchTables\bin\Debug\netcoreapp3.1 path and run following command
 .\MatchTables.exe -Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber
 ```
