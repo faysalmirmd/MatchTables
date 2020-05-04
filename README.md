@@ -54,5 +54,5 @@ Open, build and run the Solution MatchTables.sln in Visual Studio 2019
 Go to following directory and run the following command
 ```
 cd ..\MatchTables\bin\Debug\netcoreapp3.1 path and run following command
-.\MatchTables.exe -Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber
+MatchTables.exe -Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber
 ```
