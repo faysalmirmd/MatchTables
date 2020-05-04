@@ -21,7 +21,7 @@ namespace MatchTables
             var items = new List<string>();
             changedItems.Keys.ToList().ForEach(key => 
                 changedItems[key].ForEach(v => 
-                    items.Add($"{key} {v.ColumnName} has changed from {v.OriginalValue} to {v.ChangedValue}")));
+                    items.Add($"{key} {v.ColumnName} has changed from {v.OriginalValue.Trim()} to {v.ChangedValue.Trim()}")));
 
             PrintListOfItems(items, "Changed Items: ");
         }

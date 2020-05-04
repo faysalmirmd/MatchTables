@@ -39,8 +39,8 @@ namespace MatchTables
                 return validationResponse;
             }
 
-            var table1Pks = res.Where(r => r["table_name"].Equals(parameters.table1, StringComparison.InvariantCultureIgnoreCase)).Select(i => i["column_name"]);
-            var table2Pks = res.Where(r => r["table_name"].Equals(parameters.table2, StringComparison.InvariantCultureIgnoreCase)).Select(i => i["column_name"]);
+            var table1Pks = res.Where(r => ((string)r["table_name"]).Equals(parameters.table1, StringComparison.InvariantCultureIgnoreCase)).Select(i => (string)i["column_name"]);
+            var table2Pks = res.Where(r => ((string)r["table_name"]).Equals(parameters.table2, StringComparison.InvariantCultureIgnoreCase)).Select(i => (string)i["column_name"]);
 
             if (!table1Pks.Contains(parameters.primarykey, StringComparer.CurrentCultureIgnoreCase) || !table2Pks.Contains(parameters.primarykey, StringComparer.CurrentCultureIgnoreCase))
             {
@@ -51,13 +51,13 @@ namespace MatchTables
             return validationResponse;
         }
 
-        public async Task<List<Dictionary<string, string>>> GetAddedItemsAsync(Parameters parameters)
+        public async Task<List<Dictionary<string, object>>> GetAddedItemsAsync(Parameters parameters)
         {
             var sqlQuery = $"Select t2.* from [{parameters.table2}] t2 left join [{parameters.table1}] t1 on t2.[{parameters.primarykey}] = t1.[{parameters.primarykey}] where t1.[{parameters.primarykey}] is null";
             return await _sqlCommandExecutor.ExecuteAsync(sqlQuery);
         }
 
-        public async Task<List<Dictionary<string, string>>> GetRemovedItemsAsync(Parameters parameters)
+        public async Task<List<Dictionary<string, object>>> GetRemovedItemsAsync(Parameters parameters)
         {
             var sqlQuery = $"Select t1.* from [{parameters.table1}] t1 left join [{parameters.table2}] t2 on t2.[{parameters.primarykey}] = t1.[{parameters.primarykey}] where t2.[{parameters.primarykey}] is null";
             return await _sqlCommandExecutor.ExecuteAsync(sqlQuery);
@@ -85,10 +85,10 @@ namespace MatchTables
                 foreach (var key in distortedRow.Keys)
                 {
                     if (distortedRow[key].Equals(row[key])) continue;
-                    changedValues.Add(new ChangedViewData() { ColumnName = key, OriginalValue = row[key], ChangedValue = distortedRow[key] });
+                    changedValues.Add(new ChangedViewData() { ColumnName = key, OriginalValue = row[key].ToString(), ChangedValue = distortedRow[key].ToString() });
                 }
 
-                response.Add(row[parameters.primarykey], changedValues);
+                response.Add(row[parameters.primarykey].ToString(), changedValues);
             }
 
             return response;

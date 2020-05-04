@@ -31,14 +31,14 @@ namespace MatchTables
         {
             var addedItems = await _repository.GetAddedItemsAsync(parameters);
             var otherColName = addedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey, StringComparison.InvariantCultureIgnoreCase));
-            _view.ShowAddedItems(addedItems.Select(i =>  new ItemViewData {PrimaryKeyValue = i[parameters.primarykey], OtherColumnValue = otherColName !=  null ? i[otherColName] : null }));
+            _view.ShowAddedItems(addedItems.Select(i =>  new ItemViewData {PrimaryKeyValue = i[parameters.primarykey].ToString(), OtherColumnValue = otherColName !=  null ? i[otherColName].ToString() : null }));
         }
 
         private async Task ExecuteRemovedItemsAsync(Parameters parameters)
         {
             var removedItems = await _repository.GetRemovedItemsAsync(parameters);
             var otherColName = removedItems.FirstOrDefault()?.Keys?.First(k => !k.Equals(parameters.primarykey));
-            _view.ShowRemovedItems(removedItems.Select(i => new ItemViewData { PrimaryKeyValue = i[parameters.primarykey], OtherColumnValue = otherColName != null ? i[otherColName] : null }));
+            _view.ShowRemovedItems(removedItems.Select(i => new ItemViewData { PrimaryKeyValue = i[parameters.primarykey].ToString(), OtherColumnValue = otherColName != null ? i[otherColName].ToString() : null }));
         }
 
         private async Task ExecuteChangedItemsAsync(Parameters parameters)

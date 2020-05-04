@@ -17,9 +17,9 @@ namespace MatchTables
             _configuration = configuration;
         }
 
-        public async Task<List<Dictionary<string, string>>> ExecuteAsync(string sqlQuery)
+        public async Task<List<Dictionary<string, object>>> ExecuteAsync(string sqlQuery)
         {
-            var data = new List<Dictionary<string, string>>();
+            var data = new List<Dictionary<string, object>>();
             var connectionString = _configuration.GetConnectionString(ConnectionStringConfigName);
 
             await using (var connection = new SqlConnection(connectionString))
@@ -33,8 +33,8 @@ namespace MatchTables
 
                     while (reader.Read())
                     {
-                        var dic = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
-                        columns.ForEach(c => dic.Add(c, reader[c].ToString()));
+                        var dic = new Dictionary<string, object>(StringComparer.CurrentCultureIgnoreCase);
+                        columns.ForEach(c => dic.Add(c, reader[c]));
                         data.Add(dic);
                     }
                 }
