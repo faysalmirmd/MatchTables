@@ -6,7 +6,6 @@ namespace MatchTables
 {
     public class ArgumentParser : IArgumentParser
     {
-        //-Table1 SourceTable1 -Table2 SourceTable2 -Primarykey SocialSecuritynumber
         private readonly string[] _parameterNames = new[] { "table1", "table2", "primarykey" };
         public bool IsValid(string[] args)
         {

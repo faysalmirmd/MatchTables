@@ -1,7 +1,8 @@
 {
   "profiles": {
     "MatchTables": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "-Table1 EmployeeOldTable -Table2 EmployeeNewTable -Primarykey SocialSecurityNumber"
     }
   }
 }
