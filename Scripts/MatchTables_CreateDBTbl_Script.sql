@@ -43,26 +43,6 @@ BEGIN
 
 END
 
-
-IF (Not EXISTS (SELECT * 
-                 FROM INFORMATION_SCHEMA.TABLES 
-                 WHERE TABLE_SCHEMA = 'dbo' 
-                 AND  TABLE_NAME = 'EmployeeOldTable'))
-BEGIN
-    CREATE TABLE [dbo].[EmployeeOldTable](
-	[socialsecuritynumber] [nvarchar](50) NOT NULL,
-	[Firstname] [nvarchar](50) NOT NULL,
-	[Lastname] [nvarchar](50) NOT NULL,
-	[Department] [nvarchar](50) NOT NULL,
-		 CONSTRAINT [PK_EmployeeOldTable] PRIMARY KEY CLUSTERED 
-		 (
-			[socialsecuritynumber] ASC
-		 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-	) ON [PRIMARY]
-
-END
-
-
 IF (Not EXISTS (SELECT * 
                  FROM INFORMATION_SCHEMA.TABLES 
                  WHERE TABLE_SCHEMA = 'dbo' 
